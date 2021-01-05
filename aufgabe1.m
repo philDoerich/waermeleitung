@@ -1,3 +1,5 @@
+close all;
+
 %Variablen
 L       = 1;
 T       = 0.005;   %Betrachtungszeit (<= 0.005)
