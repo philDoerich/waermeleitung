@@ -84,8 +84,8 @@ end
 
 %Numerische Lösung (implizit) 
 %Tridiagonalmatrix A erstellen
-vec1    = zeros(xMax-2, 1);
-vec2    = zeros(xMax-3, 1);
+vec1    = zeros(xMax, 1);
+vec2    = zeros(xMax-1, 1);
 
 for j = 1:xMax
     vec1(j, 1) = 1+2*d;
