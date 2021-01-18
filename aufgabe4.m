@@ -66,7 +66,7 @@ end
 figure('Name', 'exakte Lösung und explizite numerische Lösung','NumberTitle','off')
 plot(x, u(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
 plot(x, v(1:xMax,1),'b+')
 

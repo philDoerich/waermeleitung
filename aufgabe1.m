@@ -11,7 +11,7 @@ L       = 1;                        %obere Intervallgrenze für x
 x       = linspace(0, L, xMax);     %Unterteilung Weg
 deltaX  = L/xMax;                   %Abstand zwischen 2 Weg-Schritten
 deltaT  = (0.5*deltaX^2)/K;         %Abstand zwischen 2 Zeit-Schritten
-tMax    = T/deltaT;                 %Anzahl Zeitschritte
+tMax    = ceil(T/deltaT);           %Anzahl Zeitschritte
 t       = linspace(0, T, tMax);     %Unterteilung Zeit
 d       = K*deltaT/deltaX^2;        %Faktor für explizite numerische Lösung 
 %Bausteine für Teilaufgaben i, ii und iii
@@ -82,6 +82,11 @@ for k = 2:tMax-1
     end
 end
 
+% deltaT  = 5*(deltaX^2)/K;         %Abstand zwischen 2 Zeit-Schritten
+% tMaxIM  = ceil(T/deltaT);         %Anzahl Zeitschritte
+% t       = linspace(0, T, tMax);   %Unterteilung Zeit
+% d       = K*deltaT/deltaX^2;      %Faktor für explizite numerische Lösung 
+
 %Numerische Lösung (implizit) 
 %Tridiagonalmatrix A erstellen
 vec1    = zeros(xMax, 1);
@@ -131,9 +136,9 @@ end
 figure('Name', 'exakte und implizite numerische Lösung (i)','NumberTitle','off')
 plot(x, uI(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
-plot(x, vI(1:xMax,1),'b+')
+plot(x, wI(1:xMax,1),'b+')
 
 plot(x, uI(1:xMax,  ceil(tMax/6)),'r')
 plot(x, wI(1:xMax,  ceil(tMax/6)),'ro')
@@ -179,7 +184,7 @@ hold off
 figure('Name', 'exakte und implizite numerische Lösung (iii)','NumberTitle','off')
 plot(x, uIII(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
 plot(x, vIII(1:xMax,1),'b+')
 
@@ -203,7 +208,7 @@ hold off
 figure('Name', 'exakte und explizite numerische Lösung (i)','NumberTitle','off')
 plot(x, uI(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
 plot(x, vI(1:xMax,1),'b+')
 
@@ -227,7 +232,7 @@ hold off
 figure('Name', 'exakte und explizite numerische Lösung (ii)','NumberTitle','off')
 plot(x, uII(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
 plot(x, vII(1:xMax,1),'b+')
 
@@ -251,7 +256,7 @@ hold off
 figure('Name', 'exakte und explizite numerische Lösung (iii)','NumberTitle','off')
 plot(x, uIII(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
 plot(x, vIII(1:xMax,1),'b+')
 

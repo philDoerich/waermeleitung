@@ -11,7 +11,7 @@ L       = 1;                        %obere Intervallgrenze für x
 x       = linspace(0, L, xMax);     %Unterteilung Weg
 deltaX  = L/xMax;                   %Abstand zwischen 2 Weg-Schritten
 deltaT  = (0.5*deltaX^2)/K;         %Abstand zwischen 2 Zeit-Schritten
-tMax    = T/deltaT;                 %Anzahl Zeitschritte
+tMax    = ceil(T/deltaT);                 %Anzahl Zeitschritte
 t       = linspace(0, T, tMax);     %Unterteilung Zeit
 d       = K*deltaT/deltaX^2;        %Faktor für explizite numerische Lösung 
 %Bausteine für Teilaufgaben i und ii 
@@ -122,7 +122,7 @@ end
 figure('Name', 'exakt und implizite numerische Lösung (i)','NumberTitle','off')
 plot(x, uI(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
 plot(x, vI(1:xMax,1),'b+')
 
@@ -146,7 +146,7 @@ hold off
 figure('Name', 'exakt und implizite numerische Lösung (ii)','NumberTitle','off')
 plot(x, uII(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
 plot(x, vII(1:xMax,1),'b+')
 
@@ -170,7 +170,7 @@ hold off
 figure('Name', 'exakt und explizite numerische Lösung (i)','NumberTitle','off')
 plot(x, uI(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
 plot(x, vI(1:xMax,1),'b+')
 
@@ -194,7 +194,7 @@ hold off
 figure('Name', 'exakt und explizite numerische Lösung (ii)','NumberTitle','off')
 plot(x, uII(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
 plot(x, vII(1:xMax,1),'b+')
 

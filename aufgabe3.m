@@ -2,17 +2,17 @@ close all;
 clear;
 
 %veränderbare Variablen
-T       = 1;        %obere Grenze für t (Betrachtungszeit bis 1 in a), bis 5 in c))
+T       = 5;        %obere Grenze für t (Betrachtungszeit bis 1 in a), bis 5 in c))
 n       = 100;      %Anzahl der Summanden pro Zeitschritt
 xMax    = 100;      %Anzahl Wegschritte
 %abhängige Variablen (bzw. vorgegeben aus Aufgabenstellung)
-a       = 2;                        %Vorgabe aus Aufgabenstellung
+a       = 0;                        %Vorgabe aus Aufgabenstellung
 K       = 1;                        %Faktor vor Uxx
 L       = 1;                        %obere Intervallgrenze für x
 x       = linspace(0, L, xMax);     %Unterteilung Weg
 deltaX  = L/xMax;                   %Abstand zwischen 2 Weg-Schritten
 deltaT  = (0.5*deltaX^2)/K;         %Abstand zwischen 2 Zeit-Schritten
-tMax    = T/deltaT;                 %Anzahl Zeitschritte
+tMax    = ceil(T/deltaT);           %Anzahl Zeitschritte
 t       = linspace(0, T, tMax);     %Unterteilung Zeit
 d       = K*deltaT/deltaX^2;        %Faktor für explizite numerische Lösung 
 B_n     = zeros(n, 1);              %Bausteine
@@ -55,9 +55,10 @@ end
 
 %Plot
 figure('Name', 'exakt und explizite numerische Lösung','NumberTitle','off')
+
 plot(x, u(1:xMax,  ceil(tMax/6)),'r')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
 plot(x, v(1:xMax,  ceil(tMax/6)),'ro')
 
