@@ -2,11 +2,11 @@ close all;
 clear;
 
 %veränderbare Variablen
-T       = 5;        %obere Grenze für t (Betrachtungszeit bis 1 in a), bis 5 in c))
+T       = 1;        %obere Grenze für t (Betrachtungszeit bis 1 in a), bis 5 in c))
 n       = 100;      %Anzahl der Summanden pro Zeitschritt
 xMax    = 100;      %Anzahl Wegschritte
 %abhängige Variablen (bzw. vorgegeben aus Aufgabenstellung)
-a       = 0;                        %Vorgabe aus Aufgabenstellung
+a       = 2;                        %Vorgabe aus Aufgabenstellung
 K       = 1;                        %Faktor vor Uxx
 L       = 1;                        %obere Intervallgrenze für x
 x       = linspace(0, L, xMax);     %Unterteilung Weg
@@ -60,17 +60,22 @@ plot(x, u(1:xMax,  ceil(tMax/6)),'r')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
 ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
-plot(x, v(1:xMax,  ceil(tMax/6)),'ro')
+i1 = plot(x, v(1:xMax,  ceil(tMax/6)),'ro');
 
 plot(x, u(1:xMax, 2* ceil(tMax/6)),'m')
-plot(x, v(1:xMax, 2* ceil(tMax/6)),'m*')
+i2 = plot(x, v(1:xMax, 2* ceil(tMax/6)),'m*');
 
 plot(x, u(1:xMax, 3* ceil(tMax/6)),'k')
-plot(x, v(1:xMax, 3* ceil(tMax/6)),'k.')
+i3 = plot(x, v(1:xMax, 3* ceil(tMax/6)),'k.');
 
 plot(x, u(1:xMax, 4* ceil(tMax/6)),'g')
-plot(x, v(1:xMax, 4* ceil(tMax/6)),'gd')
+i4 = plot(x, v(1:xMax, 4* ceil(tMax/6)),'gd');
 
 plot(x, u(1:xMax, 5* ceil(tMax/6)),'y')
-plot(x, v(1:xMax, 5* ceil(tMax/6)),'ys')
+i5 = plot(x, v(1:xMax, 5* ceil(tMax/6)),'ys');
+if (T == 1)
+    lgd = legend([i1 i2 i3 i4 i5],'0.1666 Sekunden','0.3333 Sekunden','0.5 Sekunden','0.6666 Sekunden','0.8333 Sekunden','1 Sekunde');
+else
+    lgd = legend([i1 i2 i3 i4 i5],'0.8333 Sekunden','1.6666 Sekunden','2.5 Sekunden','3.3333 Sekunden','4.1666 Sekunden','5 Sekunden');
+end
 hold off

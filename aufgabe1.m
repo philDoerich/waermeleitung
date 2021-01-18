@@ -26,10 +26,6 @@ uIII    = zeros(xMax, tMax);
 vI      = zeros(xMax, tMax);
 vII     = zeros(xMax, tMax);
 vIII    = zeros(xMax, tMax);
-%numerisch implizite Lösung für Teilaufgaben i, ii und iii
-wI      = zeros(xMax, tMax);
-wII     = zeros(xMax, tMax);
-wIII    = zeros(xMax, tMax);
 %%%%%%%%%%%%%%%%%
 %Funktionen für exakte Lösung
 funE    = @(n, t) exp(-((n*pi/L)^2)*K*t);
@@ -82,10 +78,16 @@ for k = 2:tMax-1
     end
 end
 
-% deltaT  = 5*(deltaX^2)/K;         %Abstand zwischen 2 Zeit-Schritten
-% tMaxIM  = ceil(T/deltaT);         %Anzahl Zeitschritte
-% t       = linspace(0, T, tMax);   %Unterteilung Zeit
-% d       = K*deltaT/deltaX^2;      %Faktor für explizite numerische Lösung 
+%Beim impliziten Verfahren führen wesentlich weniger Zeitschritte zu einem
+%nahezu gleichwertigen Ergebnis.
+deltaT_IM   = 2.5*(deltaX^2)/K;         %Abstand zwischen 2 Zeit-Schritten
+tMax_IM     = ceil(T/deltaT_IM);        %Anzahl Zeitschritte
+t_IM        = linspace(0, T, tMax_IM);  %Unterteilung Zeit
+d_IM        = K*deltaT_IM/deltaX^2;     %Faktor für implizite numerische Lösung 
+%numerisch implizite Lösung für Teilaufgaben i, ii und iii
+wI      = zeros(xMax, tMax_IM);
+wII     = zeros(xMax, tMax_IM);
+wIII    = zeros(xMax, tMax_IM);
 
 %Numerische Lösung (implizit) 
 %Tridiagonalmatrix A erstellen
@@ -93,10 +95,10 @@ vec1    = zeros(xMax, 1);
 vec2    = zeros(xMax-1, 1);
 
 for j = 1:xMax
-    vec1(j, 1) = 1+2*d;
+    vec1(j, 1) = 1+2*d_IM;
 end
 for j = 1:xMax-1
-    vec2(j, 1) = -d;
+    vec2(j, 1) = -d_IM;
 end
 A1 = diag(vec1);
 A2 = diag(vec2, 1);
@@ -115,7 +117,7 @@ end
 
 %Lösung berechnen für i-ten R-Vektor, diese Lösung wird neuer r-Vektor im
 %i+1-ten Schritt
-for i = 1:xMax-1
+for i = 1:tMax_IM-1
     xVecI = A\RI(:,i); %x-Vector, wird neuer r-Vektor
     RI = [RI, xVecI];
     xVecII = A\RII(:,i); %x-Vector, wird neuer r-Vektor
@@ -138,46 +140,48 @@ plot(x, uI(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
 ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
-plot(x, wI(1:xMax,1),'b+')
+i1 = plot(x, wI(1:xMax,1),'b+');
 
 plot(x, uI(1:xMax,  ceil(tMax/6)),'r')
-plot(x, wI(1:xMax,  ceil(tMax/6)),'ro')
+i2 = plot(x, wI(1:xMax,  ceil(tMax_IM/6)),'ro');
 
 plot(x, uI(1:xMax, 2* ceil(tMax/6)),'m')
-plot(x, wI(1:xMax, 2* ceil(tMax/6)),'m*')
+i3 = plot(x, wI(1:xMax, 2* ceil(tMax_IM/6)),'m*');
 
 plot(x, uI(1:xMax, 3* ceil(tMax/6)),'k')
-plot(x, wI(1:xMax, 3* ceil(tMax/6)),'k.')
+i4 = plot(x, wI(1:xMax, 3* ceil(tMax_IM/6)),'k.');
 
 plot(x, uI(1:xMax, 4* ceil(tMax/6)),'g')
-plot(x, wI(1:xMax, 4* ceil(tMax/6)),'gd')
+i5 = plot(x, wI(1:xMax, 4* ceil(tMax_IM/6)),'gd');
 
 plot(x, uI(1:xMax, 5* ceil(tMax/6)),'y')
-plot(x, wI(1:xMax, 5* ceil(tMax/6)),'ys')
+i6 = plot(x, wI(1:xMax, 5* ceil(tMax_IM/6)),'ys');
+lgd = legend([i1 i2 i3 i4 i5 i6],'0 Sekunden','0.00083 Sekunden','0.00166 Sekunden','0.00249 Sekunden','0.00332 Sekunden','0.00415 Sekunden','0,005 Sekunden');
 hold off
 
 %Plot ii)
 figure('Name', 'exakte und implizite numerische Lösung (ii)','NumberTitle','off')
 plot(x, uII(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
-ylabel('Temperatur','FontAngle','italic');
+ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
-plot(x, vII(1:xMax,1),'b+')
+i1 = plot(x, wII(1:xMax,1),'b+');
 
 plot(x, uII(1:xMax,  ceil(tMax/6)),'r')
-plot(x, wII(1:xMax,  ceil(tMax/6)),'ro')
+i2 = plot(x, wII(1:xMax,  ceil(tMax_IM/6)),'ro');
 
 plot(x, uII(1:xMax, 2* ceil(tMax/6)),'m')
-plot(x, wII(1:xMax, 2* ceil(tMax/6)),'m*')
+i3 = plot(x, wII(1:xMax, 2* ceil(tMax_IM/6)),'m*');
 
 plot(x, uII(1:xMax, 3* ceil(tMax/6)),'k')
-plot(x, wII(1:xMax, 3* ceil(tMax/6)),'k.')
+i4 = plot(x, wII(1:xMax, 3* ceil(tMax_IM/6)),'k.');
 
 plot(x, uII(1:xMax, 4* ceil(tMax/6)),'g')
-plot(x, wII(1:xMax, 4* ceil(tMax/6)),'gd')
+i5 = plot(x, wII(1:xMax, 4* ceil(tMax_IM/6)),'gd');
 
 plot(x, uII(1:xMax, 5* ceil(tMax/6)),'y')
-plot(x, wII(1:xMax, 5* ceil(tMax/6)),'ys')
+i6 = plot(x, wII(1:xMax, 5* ceil(tMax_IM/6)),'ys');
+lgd = legend([i1 i2 i3 i4 i5 i6],'0 Sekunden','0.00083 Sekunden','0.00166 Sekunden','0.00249 Sekunden','0.00332 Sekunden','0.00415 Sekunden','0,005 Sekunden');
 hold off
 
 %Plot iii)
@@ -186,22 +190,23 @@ plot(x, uIII(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
 ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
-plot(x, vIII(1:xMax,1),'b+')
+i1 = plot(x, wIII(1:xMax,1),'b+');
 
 plot(x, uIII(1:xMax,  ceil(tMax/6)),'r')
-plot(x, wIII(1:xMax,  ceil(tMax/6)),'ro')
+i2 = plot(x, wIII(1:xMax,  ceil(tMax_IM/6)),'ro');
 
 plot(x, uIII(1:xMax, 2* ceil(tMax/6)),'m')
-plot(x, wIII(1:xMax, 2* ceil(tMax/6)),'m*')
+i3 = plot(x, wIII(1:xMax, 2* ceil(tMax_IM/6)),'m*');
 
 plot(x, uIII(1:xMax, 3* ceil(tMax/6)),'k')
-plot(x, wIII(1:xMax, 3* ceil(tMax/6)),'k.')
+i4 = plot(x, wIII(1:xMax, 3* ceil(tMax_IM/6)),'k.');
 
 plot(x, uIII(1:xMax, 4* ceil(tMax/6)),'g')
-plot(x, wIII(1:xMax, 4* ceil(tMax/6)),'gd')
+i5 = plot(x, wIII(1:xMax, 4* ceil(tMax_IM/6)),'gd');
 
 plot(x, uIII(1:xMax, 5* ceil(tMax/6)),'y')
-plot(x, wIII(1:xMax, 5* ceil(tMax/6)),'ys')
+i6 = plot(x, wIII(1:xMax, 5* ceil(tMax_IM/6)),'ys');
+lgd = legend([i1 i2 i3 i4 i5 i6],'0 Sekunden','0.00083 Sekunden','0.00166 Sekunden','0.00249 Sekunden','0.00332 Sekunden','0.00415 Sekunden','0,005 Sekunden');
 hold off
 
 %Plot i)
@@ -210,22 +215,23 @@ plot(x, uI(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
 ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
-plot(x, vI(1:xMax,1),'b+')
+i1 = plot(x, vI(1:xMax,1),'b+');
 
 plot(x, uI(1:xMax,  ceil(tMax/6)),'r')
-plot(x, vI(1:xMax,  ceil(tMax/6)),'ro')
+i2 = plot(x, vI(1:xMax,  ceil(tMax/6)),'ro');
 
 plot(x, uI(1:xMax, 2* ceil(tMax/6)),'m')
-plot(x, vI(1:xMax, 2* ceil(tMax/6)),'m*')
+i3 = plot(x, vI(1:xMax, 2* ceil(tMax/6)),'m*');
 
 plot(x, uI(1:xMax, 3* ceil(tMax/6)),'k')
-plot(x, vI(1:xMax, 3* ceil(tMax/6)),'k.')
+i4 = plot(x, vI(1:xMax, 3* ceil(tMax/6)),'k.');
 
 plot(x, uI(1:xMax, 4* ceil(tMax/6)),'g')
-plot(x, vI(1:xMax, 4* ceil(tMax/6)),'gd')
+i5 = plot(x, vI(1:xMax, 4* ceil(tMax/6)),'gd');
 
 plot(x, uI(1:xMax, 5* ceil(tMax/6)),'y')
-plot(x, vI(1:xMax, 5* ceil(tMax/6)),'ys')
+i6 = plot(x, vI(1:xMax, 5* ceil(tMax/6)),'ys');
+lgd = legend([i1 i2 i3 i4 i5 i6],'0 Sekunden','0.00083 Sekunden','0.00166 Sekunden','0.00249 Sekunden','0.00332 Sekunden','0.00415 Sekunden','0,005 Sekunden');
 hold off
 
 %Plot ii)
@@ -234,22 +240,23 @@ plot(x, uII(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
 ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
-plot(x, vII(1:xMax,1),'b+')
+i1 = plot(x, vII(1:xMax,1),'b+');
 
 plot(x, uII(1:xMax,  ceil(tMax/6)),'r')
-plot(x, vII(1:xMax,  ceil(tMax/6)),'ro')
+i2 = plot(x, vII(1:xMax,  ceil(tMax/6)),'ro');
 
 plot(x, uII(1:xMax, 2* ceil(tMax/6)),'m')
-plot(x, vII(1:xMax, 2* ceil(tMax/6)),'m*')
+i3 = plot(x, vII(1:xMax, 2* ceil(tMax/6)),'m*');
 
 plot(x, uII(1:xMax, 3* ceil(tMax/6)),'k')
-plot(x, vII(1:xMax, 3* ceil(tMax/6)),'k.')
+i4 = plot(x, vII(1:xMax, 3* ceil(tMax/6)),'k.');
 
 plot(x, uII(1:xMax, 4* ceil(tMax/6)),'g')
-plot(x, vII(1:xMax, 4* ceil(tMax/6)),'gd')
+i5 = plot(x, vII(1:xMax, 4* ceil(tMax/6)),'gd');
 
 plot(x, uII(1:xMax, 5* ceil(tMax/6)),'y')
-plot(x, vII(1:xMax, 5* ceil(tMax/6)),'ys')
+i6 = plot(x, vII(1:xMax, 5* ceil(tMax/6)),'ys');
+lgd = legend([i1 i2 i3 i4 i5 i6],'0 Sekunden','0.00083 Sekunden','0.00166 Sekunden','0.00249 Sekunden','0.00332 Sekunden','0.00415 Sekunden','0,005 Sekunden');
 hold off
 
 %Plot iii)
@@ -258,20 +265,21 @@ plot(x, uIII(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
 ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
-plot(x, vIII(1:xMax,1),'b+')
+i1 = plot(x, vIII(1:xMax,1),'b+');
 
 plot(x, uIII(1:xMax,  ceil(tMax/6)),'r')
-plot(x, vIII(1:xMax,  ceil(tMax/6)),'ro')
+i2 = plot(x, vIII(1:xMax,  ceil(tMax/6)),'ro');
 
 plot(x, uIII(1:xMax, 2* ceil(tMax/6)),'m')
-plot(x, vIII(1:xMax, 2* ceil(tMax/6)),'m*')
+i3 = plot(x, vIII(1:xMax, 2* ceil(tMax/6)),'m*');
 
 plot(x, uIII(1:xMax, 3* ceil(tMax/6)),'k')
-plot(x, vIII(1:xMax, 3* ceil(tMax/6)),'k.')
+i4 = plot(x, vIII(1:xMax, 3* ceil(tMax/6)),'k.');
 
 plot(x, uIII(1:xMax, 4* ceil(tMax/6)),'g')
-plot(x, vIII(1:xMax, 4* ceil(tMax/6)),'gd')
+i5 = plot(x, vIII(1:xMax, 4* ceil(tMax/6)),'gd');
 
 plot(x, uIII(1:xMax, 5* ceil(tMax/6)),'y')
-plot(x, vIII(1:xMax, 5* ceil(tMax/6)),'ys')
+i6 = plot(x, vIII(1:xMax, 5* ceil(tMax/6)),'ys');
+lgd = legend([i1 i2 i3 i4 i5 i6],'0 Sekunden','0.00083 Sekunden','0.00166 Sekunden','0.00249 Sekunden','0.00332 Sekunden','0.00415 Sekunden','0,005 Sekunden');
 hold off

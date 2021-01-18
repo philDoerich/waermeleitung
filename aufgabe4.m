@@ -4,21 +4,19 @@ clear;
 %veränderbare Variablen
 T       = 0.1;                  %obere Grenze für t (Betrachtungszeit)
 n       = 100;                  %Anzahl der Summanden pro Zeitschritt
-eps     = 2;                    %Epsilon (aus Aufgabenstellung)
-a       = 1;                    %variabel (aus Aufgabenstellung)
+eps     = 1;                    %Epsilon (aus Aufgabenstellung)
+a       = 2;                    %variabel (aus Aufgabenstellung)
 alpha   = -((9*pi^2)/4) - a^2;  %Konstante aus Separationsansatz (X * T = alpha)
 xMax    = 100;                  %Anzahl Wegschritte
 %abhängige Variablen (bzw. vorgegeben aus Aufgabenstellung)
-L       = 1;                                %obere Intervallgrenze für x
-x       = linspace(0, L, xMax);             %Unterteilung Weg
-deltaX  = L/xMax;                           %Abstand zwischen 2 Weg-Schritten
-% deltaT  = (0.5*0.5*deltaX^2)/eps;               %Abstand zwischen 2 Zeit-Schritten
-% deltaT  = 0.9*deltaX/(2*a);
-deltaT  = min(0.9*deltaX/(2*a), (0.5*0.5*deltaX^2)/eps);
-tMax    = ceil(T/deltaT);                   %Anzahl Zeitschritte
-t       = linspace(0, T, tMax);             %Unterteilung Zeit
-u       = zeros(xMax, tMax);                %exakte Lösung
-v       = zeros(xMax, tMax);                %numerische Lösung
+L       = 1;                                                %obere Intervallgrenze für x
+x       = linspace(0, L, xMax);                             %Unterteilung Weg
+deltaX  = L/xMax;                                           %Abstand zwischen 2 Weg-Schritten
+deltaT  = min(0.9*deltaX/(2*a), (0.5*0.5*deltaX^2)/eps);    %Abstand zwischen 2 Zeit-Schritten
+tMax    = ceil(T/deltaT);                                   %Anzahl Zeitschritte
+t       = linspace(0, T, tMax);                             %Unterteilung Zeit
+u       = zeros(xMax, tMax);                                %exakte Lösung
+v       = zeros(xMax, tMax);                                %numerische Lösung
 %%%%%%%%%%%%%%%%%
 %Funktionen für exakte Lösung
 funSin  = @(x) sin((3*pi*x)/2); 
@@ -68,20 +66,21 @@ plot(x, u(1:xMax,1),'b')
 xlabel('Betrachtetes Objekt','FontAngle','italic');
 ylabel('Temperaturverteilung','FontAngle','italic');
 hold on 
-plot(x, v(1:xMax,1),'b+')
+i1 = plot(x, v(1:xMax,1),'b+');
 
 plot(x, u(1:xMax,  ceil(tMax/6)),'r')
-plot(x, v(1:xMax,  ceil(tMax/6)),'ro')
+i2 = plot(x, v(1:xMax,  ceil(tMax/6)),'ro');
 
 plot(x, u(1:xMax, 2* ceil(tMax/6)),'m')
-plot(x, v(1:xMax, 2* ceil(tMax/6)),'m*')
+i3 = plot(x, v(1:xMax, 2* ceil(tMax/6)),'m*');
 
 plot(x, u(1:xMax, 3* ceil(tMax/6)),'k')
-plot(x, v(1:xMax, 3* ceil(tMax/6)),'k.')
+i4 = plot(x, v(1:xMax, 3* ceil(tMax/6)),'k.');
 
 plot(x, u(1:xMax, 4* ceil(tMax/6)),'g')
-plot(x, v(1:xMax, 4* ceil(tMax/6)),'gd')
+i5 = plot(x, v(1:xMax, 4* ceil(tMax/6)),'gd');
 
 plot(x, u(1:xMax, 5* ceil(tMax/6)),'y')
-plot(x, v(1:xMax, 5* ceil(tMax/6)),'ys')
+i6 = plot(x, v(1:xMax, 5* ceil(tMax/6)),'ys');
+lgd = legend([i1 i2 i3 i4 i5 i6],'0 Sekunden','0.02 Sekunden','0.04 Sekunden','0.06 Sekunden','0.08 Sekunden','0.1 Sekunden');
 hold off
